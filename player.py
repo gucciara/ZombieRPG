@@ -9,6 +9,7 @@ class Character:
         self.__health = 100
         self.__attack = random.randint(20, 30)
         self.__defense = random.randint(5, 15)
+        self.__in_battle = False
 
     """
     Damage is the attacker's total attack minus the target's total defense. Minimum damage is 0.
@@ -23,13 +24,12 @@ class Character:
         self.health -= damage
         return damage
 
-
     @property
     def health(self):
-        # if self.__health <= 0:
-            # if self.__class__.__name__ == 'NPC':
-                # raise MonsterDeathException("NPC died.", self)
-            # raise CharacterDeathException('Character dies.', self)
+        if self.__health <= 0:
+            if self.__class__.__name__ == 'NPC':
+                raise NPCDeathException("NPC died.", self)
+            raise PlayerDeathException('Player dies.', self)
         return self.__health
 
     @health.setter
@@ -51,6 +51,16 @@ class Character:
     @defense.setter
     def defense(self, defense):
         self.__defense = defense
+
+    @property
+    def in_battle(self):
+        return self.__in_battle
+
+    @in_battle.setter
+    def in_battle(self, in_battle):
+        if not isinstance(in_battle, bool):
+            raise ValueError("in_battle must be a bool variable")
+        self.__in_battle = in_battle
 
 
 class Player(Character):
@@ -94,6 +104,26 @@ class NPC(Character):
     def __init__(self):
         super().__init__()
 
+
+# These classes are for when a player or enemy dies in battle
+class PlayerDeathException(Exception):
+    def __init__(self, st, player):
+        super().__init__(self, st)
+        self.__player = player
+
+    @property
+    def character(self):
+        return self.__player
+
+
+class NPCDeathException(Exception):
+    def __init__(self, st, npc):
+        super().__init__(self, st)
+        self.__NPC = npc
+
+    @property
+    def character(self):
+        return self.__NPC
 
 p = Player()
 n = NPC()
