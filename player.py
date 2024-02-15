@@ -82,12 +82,14 @@ class Player(Character):
     hunger is supposed to decrease when the player is in the overworld but NOT during battle. Bool parameter should 
     be set to 'True' for when you want this function to be active.
     """
-    def decrease_hunger(self, active: bool) -> int:
+    def decrease_hunger(self) -> int:
         last_tick = datetime.datetime.now()
-        while active and self.hunger > 0:
+        while self.in_battle and self.hunger > 0:
             if datetime.datetime.now() - last_tick > datetime.timedelta(seconds=1):
                 self.hunger -= 1
                 last_tick = datetime.datetime.now()
+        if self.hunger <= 0:
+            PlayerDeathException("Player died of hunger", self)
         return self.hunger
 
     @property
