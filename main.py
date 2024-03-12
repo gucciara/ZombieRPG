@@ -1,6 +1,7 @@
 from sprites import *
 from configuration import *
 import pygame
+import random
 import sys
 
 class Spritesheet:
@@ -15,13 +16,14 @@ class Spritesheet:
         return sprite
 
 class Game:
-
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('/Users/Tone/PycharmProjects/ZombieRPG/tiles_spritesheet.png')
         self.running = True
+        self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.enemies = pygame.sprite.Group()  # Group for enemies
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -31,9 +33,17 @@ class Game:
                     Block(self, j, i)
 
     def create(self):
-        self.all_sprites = pygame.sprite.LayeredUpdates()
         self.createTileMap()
         self.player = Player(self, 1, 2)
+        self.all_sprites.add(self.player)
+
+    def spawn_enemy(self):
+        enemy_type = random.choice([SlowEnemy, MediumEnemy, FastEnemy])
+        x = random.randint(0, WIN_WIDTH)
+        y = random.randint(0, WIN_HEIGHT)
+        enemy = enemy_type(self, x, y)
+        self.all_sprites.add(enemy)
+        self.enemies.add(enemy)
 
     def events(self):
         for event in pygame.event.get():
@@ -44,14 +54,11 @@ class Game:
 
     def update(self):
         self.all_sprites.update()
-        # Update player
-        self.player.update()
+        self.enemies.update()  # Update enemies
 
     def draw(self):
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
-        # Draw player
-        self.screen.blit(self.player.image, self.player.rect)
         self.clock.tick(FPS)
         pygame.display.update()
 
@@ -64,8 +71,11 @@ class Game:
 game = Game()
 game.create()
 
-while game.running:
-    game.main()
+# Spawn initial enemies
+for _ in range(5):
+    game.spawn_enemy()
+
+game.main()
 
 pygame.quit()
 sys.exit()
