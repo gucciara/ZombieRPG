@@ -1,6 +1,3 @@
-'''
-Configuration for aspect ratio and frame rate of the game
-'''
 import pygame
 from sprites import *
 
@@ -11,8 +8,11 @@ FPS = 60
 
 BLOCKS_LAYER = 2
 GROUND_LAYER = 1
+PLAYER_LAYER = 3  # Adjust layer for the player
+#speed of player is equivalent to pixels moved - we want to use 32 since it's a 32x32 pixel game
+PLAYER_SPEED = 32
 
-BLACK = (0,0,0)
+BLACK = (0, 0, 0)
 
 tilemap = [
     'BBBBBBBBBBBBBBBBBBBB',
@@ -31,5 +31,4 @@ tilemap = [
     'BB................BB',
     'BBB..............BBB',
     'BBBBBBBBBBBBBBBBBBBB',
-
-    ]
+]
