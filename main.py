@@ -1,7 +1,7 @@
 
 
-from configuration import *
 from sprites import *
+from configuration import *
 import pygame
 import sys
 
@@ -22,7 +22,7 @@ class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.terrain_spritesheet = Spritesheet('assets/images/terrain.png')
+        self.terrain_spritesheet = Spritesheet('/Users/Tone/PycharmProjects/ZombieRPG/tiles_spritesheet.png')
         self.running = True
 
     def createTileMap(self):
