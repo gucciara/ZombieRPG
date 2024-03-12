@@ -8,11 +8,15 @@ FPS = 60
 
 BLOCKS_LAYER = 2
 GROUND_LAYER = 1
-PLAYER_LAYER = 3  # Adjust layer for the player
+PLAYER_LAYER = 3
+ENEMY_LAYER = 4
 #speed of player is equivalent to pixels moved - we want to use 32 since it's a 32x32 pixel game
 PLAYER_SPEED = 32
 
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 tilemap = [
     'BBBBBBBBBBBBBBBBBBBB',
