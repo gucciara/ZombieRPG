@@ -14,9 +14,9 @@ class Block(pygame.sprite.Sprite):
         self.y = y*TILESIZE
 
         self.width = TILESIZE
-        self.heigh = TILESIZE
+        self.height = TILESIZE
 
-        self.image = self.game.terrain_spritesheet.get_image(#on SPRITESHEET THAT I HAVE TO MAKE, PICK COORDINATES FOR BLOCK ON SHEET AND INSERT in X AND Y format, self.width, self.height)
+        self.image = self.game.terrain_spritesheet.get_image(31,0, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -33,9 +33,9 @@ class Ground(pygame.sprite.Sprite):
         self.y = y*TILESIZE
 
         self.width = TILESIZE
-        self.heigh = TILESIZE
+        self.height = TILESIZE
 
-        self.image = self.game.terrain_spritesheet.get_image(#on SPRITESHEET THAT I HAVE TO MAKE, PICK COORDINATES FOR BLOCK ON SHEET AND INSERT in X AND Y; x, y, self.width, self.height)
+        self.image = self.game.terrain_spritesheet.get_image(0,0, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
