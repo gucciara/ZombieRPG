@@ -130,7 +130,7 @@ class MediumEnemy(pygame.sprite.Sprite):
         self.health = 15
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/Tone/PycharmProjects/ZombieRPG/jack.png')
+        self.image = pygame.image.load('/Users/Tone/PycharmProjects/ZombieRPG/frost.png')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
