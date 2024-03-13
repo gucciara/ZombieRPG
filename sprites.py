@@ -1,5 +1,8 @@
 from configuration import *
 import pygame
+import random
+import datetime
+import asyncio
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -49,13 +52,19 @@ class Player(pygame.sprite.Sprite):
 
         self.facing = 'down'
 
-        image_to_load = pygame.image.load("/Users/Tone/PycharmProjects/ZombieRPG/character.png")
+        image_to_load = pygame.image.load('character.png')
         self.image = pygame.Surface((self.width, self.height))
         self.image.set_colorkey(BLACK)
         self.image.blit(image_to_load, (0, 0))
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
+
+        self.__hunger = 100
+        self.__health = 100
+        self.__attack = random.randint(20, 30)
+        self.__defense = random.randint(5, 15)
+        self.__in_battle = False
 
     def handle_event(self, event):
         # Handle player movement events
@@ -80,6 +89,57 @@ class Player(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
+    """
+       A random amount is added to the player's hunger meter after they defeat an enemy. returns the amount
+       """
+
+    def consume(self):
+        amount = random.randint(10, 30)
+        self.hunger += amount
+        return amount
+
+    @property
+    def hunger(self):
+        return self.__hunger
+
+    @hunger.setter
+    def hunger(self, hunger):
+        self.__hunger = hunger
+
+    @property
+    def health(self):
+        return self.__health
+
+    @health.setter
+    def health(self, health):
+        self.__health = health
+
+    @property
+    def attack(self):
+        return self.__attack
+
+    @attack.setter
+    def attack(self, attack):
+        self.__attack = attack
+
+    @property
+    def defense(self):
+        return self.__defense
+
+    @defense.setter
+    def defense(self, defense):
+        self.__defense = defense
+
+    @property
+    def in_battle(self):
+        return self.__in_battle
+
+    @in_battle.setter
+    def in_battle(self, in_battle):
+        if not isinstance(in_battle, bool):
+            raise ValueError("in_battle must be a bool variable")
+        self.__in_battle = in_battle
+
 class SlowEnemy(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         super().__init__(game.all_sprites)
@@ -95,7 +155,7 @@ class SlowEnemy(pygame.sprite.Sprite):
         self.health = 20
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/Tone/PycharmProjects/ZombieRPG/pyro.jpg')
+        self.image = pygame.image.load('pyro.jpg')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -130,7 +190,7 @@ class MediumEnemy(pygame.sprite.Sprite):
         self.health = 15
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/Tone/PycharmProjects/ZombieRPG/frost.png')
+        self.image = pygame.image.load('/Users/Harry/PycharmProjects/ZombieRPGGame/frost.png')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -152,7 +212,7 @@ class FastEnemy(pygame.sprite.Sprite):
         self.health = 10
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/Tone/PycharmProjects/ZombieRPG/ripper.jpg')
+        self.image = pygame.image.load('ripper.jpg')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)

@@ -20,10 +20,11 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.terrain_spritesheet = Spritesheet('/Users/Tone/PycharmProjects/ZombieRPG/tiles_spritesheet.png')
+        self.terrain_spritesheet = Spritesheet('tiles_spritesheet.png')
         self.running = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.Group()  # Group for enemies
+
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -62,11 +63,34 @@ class Game:
         self.clock.tick(FPS)
         pygame.display.update()
 
-    def main(self):
+
+    """
+        hunger is supposed to decrease when the player is in the overworld but NOT during battle. Bool parameter should 
+        be set to 'True' for when you want this function to be active.
+    """
+    async def decrease_hunger(self) -> int:
+        last_tick = datetime.datetime.now()
+        while self.player.hunger > 0:
+            await asyncio.sleep(1)
+            if datetime.datetime.now() - last_tick > datetime.timedelta(seconds=1):
+                print(self.player.hunger)
+                self.player.hunger -= 1
+                last_tick = datetime.datetime.now()
+
+        if self.player.hunger <= 0:
+            raise Exception("Player died of hunger", self)
+        return self.player.hunger
+
+    async def game_loop(self):
+        asyncio.create_task(self.decrease_hunger())  # Start async operation
         while self.running:
             self.events()
             self.update()
             self.draw()
+            await asyncio.sleep(0.01)
+
+    def main(self):
+        asyncio.run(self.game_loop())
 
 game = Game()
 game.create()
@@ -75,7 +99,9 @@ game.create()
 for _ in range(5):
     game.spawn_enemy()
 
-game.main()
 
+
+
+game.main()
 pygame.quit()
 sys.exit()
