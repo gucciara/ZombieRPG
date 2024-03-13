@@ -61,6 +61,11 @@ class Game:
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
+        font = pygame.font.Font(None, 100)
+        text_surface = font.render(str(self.player.hunger), True, WHITE)
+        text_area = text_surface.get_rect()
+        text_area.center = (WIN_WIDTH - 60, WIN_HEIGHT - 60)
+        self.screen.blit(text_surface, text_area)
         pygame.display.update()
 
 
@@ -71,8 +76,8 @@ class Game:
     async def decrease_hunger(self) -> int:
         last_tick = datetime.datetime.now()
         while self.player.hunger > 0:
-            await asyncio.sleep(1)
-            if datetime.datetime.now() - last_tick > datetime.timedelta(seconds=1):
+            await asyncio.sleep(0.25)
+            if datetime.datetime.now() - last_tick > datetime.timedelta(seconds=0.25):
                 print(self.player.hunger)
                 self.player.hunger -= 1
                 last_tick = datetime.datetime.now()
