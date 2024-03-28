@@ -1,8 +1,7 @@
 from config import *
 import pygame
 import random
-import datetime
-import asyncio
+
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -52,7 +51,7 @@ class Player(pygame.sprite.Sprite):
 
         self.facing = 'down'
 
-        image_to_load = pygame.image.load('/Users/zachmeitz/PycharmProjects/testing2/character.png')
+        image_to_load = pygame.image.load('character.png')
         self.image = pygame.Surface((self.width, self.height))
         self.image.set_colorkey(BLACK)
         self.image.blit(image_to_load, (0, 0))
@@ -155,7 +154,7 @@ class SlowEnemy(pygame.sprite.Sprite):
         self.health = 20
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/zachmeitz/PycharmProjects/testing2/pyro.jpg')
+        self.image = pygame.image.load('pyro.jpg')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -190,7 +189,7 @@ class MediumEnemy(pygame.sprite.Sprite):
         self.health = 15
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/zachmeitz/PycharmProjects/testing2/frost.png')
+        self.image = pygame.image.load('frost.png')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -212,7 +211,7 @@ class FastEnemy(pygame.sprite.Sprite):
         self.health = 10
 
         self.image = pygame.Surface((self.width, self.height))
-        self.image = pygame.image.load('/Users/zachmeitz/PycharmProjects/testing2/ripper.jpg')
+        self.image = pygame.image.load('ripper.jpg')
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)

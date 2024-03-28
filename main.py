@@ -2,7 +2,8 @@ from sprites import *
 from config import *
 import pygame
 import random
-import sys
+import asyncio
+import datetime
 
 
 class Spritesheet:
@@ -22,7 +23,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.terrain_spritesheet = Spritesheet('/Users/zachmeitz/PycharmProjects/testing2/tiles_spritesheet.png')
+        self.terrain_spritesheet = Spritesheet('tiles_spritesheet.png')
         self.running = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.Group()  # Group for enemies
