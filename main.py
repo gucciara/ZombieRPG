@@ -1,9 +1,9 @@
 from sprites import *
-from configuration import *
+from config import *
 import pygame
-# import random
+import random
 import sys
-from player import *
+
 
 class Spritesheet:
     def __init__(self, path):
@@ -11,21 +11,21 @@ class Spritesheet:
 
     def get_image(self, x, y, width, height):
         sprite = pygame.Surface([width, height])
-        sprite.blit(self.spritesheet, (0,0), (x,y,width,height))
+        sprite.blit(self.spritesheet, (0, 0), (x, y, width, height))
         sprite.set_colorkey(BLACK)
 
         return sprite
+
 
 class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.terrain_spritesheet = Spritesheet('tiles_spritesheet.png')
+        self.terrain_spritesheet = Spritesheet('/Users/zachmeitz/PycharmProjects/testing2/tiles_spritesheet.png')
         self.running = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.Group()  # Group for enemies
-
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -38,7 +38,6 @@ class Game:
         self.createTileMap()
         self.player = Player(self, 1, 2)
         self.all_sprites.add(self.player)
-        self.character = Character()
 
     def spawn_enemy(self):
         enemy_type = random.choice([SlowEnemy, MediumEnemy, FastEnemy])
@@ -64,14 +63,32 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
         font = pygame.font.Font(None, 100)
-        text_surface = font.render(str(self.character.hunger), True, WHITE)
+        text_surface = font.render(str(self.player.hunger), True, WHITE)
         text_area = text_surface.get_rect()
         text_area.center = (WIN_WIDTH - 60, WIN_HEIGHT - 60)
         self.screen.blit(text_surface, text_area)
         pygame.display.update()
 
+    """
+        hunger is supposed to decrease when the player is in the overworld but NOT during battle. Bool parameter should 
+        be set to 'True' for when you want this function to be active.
+    """
+
+    async def decrease_hunger(self) -> int:
+        last_tick = datetime.datetime.now()
+        while self.player.hunger > 0:
+            await asyncio.sleep(0.25)
+            if datetime.datetime.now() - last_tick > datetime.timedelta(seconds=0.25):
+                print(self.player.hunger)
+                self.player.hunger -= 1
+                last_tick = datetime.datetime.now()
+
+        if self.player.hunger <= 0:
+            raise Exception("Player died of hunger", self)
+        return self.player.hunger
+
     async def game_loop(self):
-        asyncio.create_task(self.character.decrease_hunger())  # Start async operation
+        asyncio.create_task(self.decrease_hunger())  # Start async operation
         while self.running:
             self.events()
             self.update()
@@ -81,16 +98,15 @@ class Game:
     def main(self):
         asyncio.run(self.game_loop())
 
-game = Game()
-game.create()
 
-# Spawn initial enemies
-for _ in range(5):
-    game.spawn_enemy()
+def start_pygame():
+    game = Game()
+    game.create()
+    # Spawn initial enemies
+    for _ in range(5):
+        game.spawn_enemy()
+    game.main()
+    pygame.quit()
 
-
-
-
-game.main()
-pygame.quit()
-sys.exit()
+if __name__ == '__main__':
+    start_pygame()
